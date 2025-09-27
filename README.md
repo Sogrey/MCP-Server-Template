@@ -121,19 +121,18 @@ TRANSPORT=sse
 
 ### 构建镜像
 ```bash
-docker build -t mcp-server .
+docker build -t mcp-server-template .
 ```
 
 ### 运行容器
 ```bash
 # 基本运行
-docker run -d -p 8000:8000 --name mcp-server mcp-server
+docker run -d -p 8000:8000 --name mcp-server-template mcp-server-template python main.py --port 8000 --transport sse
 
 # 自定义端口和传输协议
 docker run -d -p 8080:8080 \
-  -e PORT=8080 \
-  -e TRANSPORT=streamable-http \
-  --name mcp-server mcp-server
+  --name mcp-server mcp-server \
+  python main.py --port 8080 --transport streamable-http
 ```
 
 ### 使用docker-compose

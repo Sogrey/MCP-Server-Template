@@ -2,16 +2,19 @@
 FROM python:3.11-slim as builder
 
 WORKDIR /app
-COPY requirements.txt .
+COPY pyproject.toml .
 
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir ".[cli]"
 
 # 运行阶段
 FROM python:3.11-slim
 
 WORKDIR /app
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
+
+ENV PATH="/usr/local/bin:${PATH}"
 
 # 确保脚本可执行
 RUN chmod +x main.py
